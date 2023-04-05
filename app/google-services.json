@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1011738983661",
+    "project_id": "replybot-72507",
+    "storage_bucket": "replybot-72507.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1011738983661:android:81b95fb03e52cf954ee0e4",
+        "android_client_info": {
+          "package_name": "com.nathalie.replybot"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1011738983661-r15jfpkh32ih2stkkfct3527ieh4ur7r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD_LnN3ZeZR88LVsCJbzn8mEfTQopGQ7ug"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1011738983661-r15jfpkh32ih2stkkfct3527ieh4ur7r.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
