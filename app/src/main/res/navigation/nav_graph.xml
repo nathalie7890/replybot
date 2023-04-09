@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/rulesFragment">
+
+    <action
+        android:id="@+id/to_login_fragment"
+        app:destination="@+id/loginFragment"
+        app:popUpTo="@id/rulesFragment"
+        app:popUpToInclusive="true" />
+    <action
+        android:id="@+id/to_rules_fragment"
+        app:destination="@+id/rulesFragment" />
+
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.nathalie.replybot.views.fragments.auth.LoginFragment"
+        android:label="Login"
+        tools:layout="@layout/fragment_login">
+        <action
+            android:id="@+id/action_login_to_signup"
+            app:destination="@id/signupFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/signupFragment"
+        android:name="com.nathalie.replybot.views.fragments.auth.SignupFragment"
+        android:label="Create an account"
+        tools:layout="@layout/fragment_signup">
+        <action
+            android:id="@+id/action_signup_to_login"
+            app:destination="@id/loginFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/rulesFragment"
+        android:name="com.nathalie.replybot.views.fragments.rule.RulesFragment"
+        android:label="Rules"
+        tools:layout="@layout/fragment_rules">
+        <action
+            android:id="@+id/action_rules_to_addRule"
+            app:destination="@id/addRuleFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addRuleFragment"
+        android:name="com.nathalie.replybot.views.fragments.rule.AddRuleFragment"
+        android:label="AddRuleFragment"
+        tools:layout="@layout/fragment_add_rule"
+        />
+
+</navigation>
