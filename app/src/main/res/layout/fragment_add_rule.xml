@@ -106,9 +106,9 @@
             android:id="@+id/ll_whatsapp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
             android:background="@drawable/whatsapp_ll"
             android:weightSum="1"
-            android:layout_marginBottom="8dp"
             app:layout_constraintBottom_toTopOf="@id/ll_facebook"
             app:layout_constraintEnd_toEndOf="@id/guidelineRight"
             app:layout_constraintStart_toStartOf="@id/guidelineLeft">
@@ -133,10 +133,10 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_marginBottom="24dp"
             android:id="@+id/ll_facebook"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
             android:background="@drawable/facebook_ll"
             android:weightSum="1"
             app:layout_constraintBottom_toTopOf="@id/btnSave"
@@ -167,31 +167,33 @@
             android:id="@+id/btnSave"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:paddingVertical="13dp"
             android:text="Save"
             android:textAllCaps="false"
             app:cornerRadius="10dp"
-            app:strokeWidth="2dp"
-            app:strokeColor="@color/dark_grey"
             app:layout_constraintBottom_toTopOf="@id/guidelineBottom"
             app:layout_constraintEnd_toStartOf="@id/guidelineRight"
-            app:layout_constraintStart_toEndOf="@id/btnDelete" />
+            app:layout_constraintStart_toEndOf="@id/btnDelete"
+            app:strokeColor="@color/dark_grey"
+            app:strokeWidth="2dp" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnDelete"
-            android:visibility="gone"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:backgroundTint="@color/bg"
+            android:paddingVertical="13dp"
             android:text="Delete"
             android:textAllCaps="false"
-            app:cornerRadius="10dp"
-            app:strokeWidth="2dp"
-            android:backgroundTint="@color/bg"
             android:textColor="@color/red"
-            app:strokeColor="@color/dark_grey"
-            android:layout_marginEnd="8dp"
+            android:visibility="gone"
+            app:cornerRadius="10dp"
             app:layout_constraintBottom_toTopOf="@id/guidelineBottom"
             app:layout_constraintEnd_toStartOf="@id/btnSave"
-            app:layout_constraintStart_toEndOf="@id/guidelineLeft" />
+            app:layout_constraintStart_toEndOf="@id/guidelineLeft"
+            app:strokeColor="@color/dark_grey"
+            app:strokeWidth="2dp" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

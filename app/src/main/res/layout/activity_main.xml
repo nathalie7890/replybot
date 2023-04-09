@@ -43,6 +43,7 @@
                     android:layout_alignParentBottom="true"
                     android:backgroundTint="@color/bg"
                     android:text="Logout"
+                    android:textAllCaps="false"
                     android:textColor="@color/dark_grey"
                     android:textStyle="bold" />
 
