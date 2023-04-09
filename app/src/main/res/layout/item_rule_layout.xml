@@ -28,11 +28,28 @@
             <TextView
                 android:id="@+id/tvMsg"
                 android:textSize="15sp"
-                android:lines="2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Message"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:gravity="end|center"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/iv_whatsapp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_marginEnd="4dp"
+                    android:src="@drawable/ic_whatsapp_color"/>
+                <ImageView
+                    android:id="@+id/iv_facebook"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/ic_facebook_color"/>
+            </LinearLayout>
         </LinearLayout>
+
 
     </com.google.android.material.card.MaterialCardView>
 </layout>

@@ -2,6 +2,7 @@ package com.nathalie.replybot.views.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.nathalie.replybot.data.model.Rule
 import com.nathalie.replybot.databinding.ItemRuleLayoutBinding
@@ -26,6 +27,8 @@ class RuleAdapter(private var rules: MutableList<Rule>) :
         holder.binding.run {
             tvKeyword.text = rule.keyword
             tvMsg.text = rule.msg
+            ivWhatsapp.isVisible = rule.whatsapp
+            ivFacebook.isVisible = rule.facebook
 
             cvRule.setOnClickListener {
                 listener?.onClick(rule)

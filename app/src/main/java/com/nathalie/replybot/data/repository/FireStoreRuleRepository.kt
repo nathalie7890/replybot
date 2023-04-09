@@ -1,7 +1,9 @@
 package com.nathalie.replybot.data.repository
 
+import android.util.Log
 import com.google.firebase.firestore.CollectionReference
 import com.nathalie.replybot.data.model.Rule
+import com.nathalie.replybot.utils.Constants
 import kotlinx.coroutines.tasks.await
 
 class FireStoreRuleRepository(private val ref: CollectionReference) : RuleRepository {
@@ -16,7 +18,8 @@ class FireStoreRuleRepository(private val ref: CollectionReference) : RuleReposi
     }
 
     override suspend fun getRuleById(id: String): Rule? {
-        TODO("Not yet implemented")
+        val res = ref.document(id).get().await()
+        return res.toObject(Rule::class.java)?.copy(id = id)
     }
 
     override suspend fun addRule(rule: Rule) {
@@ -24,11 +27,13 @@ class FireStoreRuleRepository(private val ref: CollectionReference) : RuleReposi
     }
 
     override suspend fun updateRule(id: String, rule: Rule): Rule? {
-        TODO("Not yet implemented")
+        Log.d(Constants.DEBUG, rule.toString())
+        ref.document(id).set(rule).await()
+        return null
     }
 
     override suspend fun deleteRule(id: String) {
-        TODO("Not yet implemented")
+        ref.document(id).delete().await()
     }
 
 
