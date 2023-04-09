@@ -42,6 +42,8 @@ class MainActivity : AppCompatActivity() {
 
         if (!authRepo.isLoggedIn()) {
             findNavController(R.id.navHostFragment).navigate(R.id.to_login_fragment)
+        } else {
+            setUsername()
         }
 
         btnLogout.setOnClickListener {
