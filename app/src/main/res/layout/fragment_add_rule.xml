@@ -126,6 +126,7 @@
                 app:drawableStartCompat="@drawable/ic_whatsapp" />
 
             <CheckBox
+                android:id="@+id/checkWhatsapp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:buttonTint="@color/white" />
@@ -155,6 +156,7 @@
                 app:drawableStartCompat="@drawable/ic_facebook" />
 
             <CheckBox
+                android:id="@+id/checkFacebook"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:buttonTint="@color/white" />
@@ -168,9 +170,28 @@
             android:text="Save"
             android:textAllCaps="false"
             app:cornerRadius="10dp"
+            app:strokeWidth="2dp"
+            app:strokeColor="@color/dark_grey"
             app:layout_constraintBottom_toTopOf="@id/guidelineBottom"
-            app:layout_constraintEnd_toEndOf="@id/guidelineRight"
-            app:layout_constraintStart_toStartOf="@id/guidelineLeft" />
+            app:layout_constraintEnd_toStartOf="@id/guidelineRight"
+            app:layout_constraintStart_toEndOf="@id/btnDelete" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnDelete"
+            android:visibility="gone"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Delete"
+            android:textAllCaps="false"
+            app:cornerRadius="10dp"
+            app:strokeWidth="2dp"
+            android:backgroundTint="@color/bg"
+            android:textColor="@color/red"
+            app:strokeColor="@color/dark_grey"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintBottom_toTopOf="@id/guidelineBottom"
+            app:layout_constraintEnd_toStartOf="@id/btnSave"
+            app:layout_constraintStart_toEndOf="@id/guidelineLeft" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

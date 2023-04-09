@@ -12,8 +12,10 @@ abstract class BaseRuleFragment : BaseFragment<FragmentAddRuleBinding>() {
         return binding?.run {
             val keyword = etKeyword.text.toString()
             val msg = etMsg.text.toString()
+            val whatsapp = checkWhatsapp.isChecked
+            val facebook = checkFacebook.isChecked
 
-            Rule("", keyword, msg, "")
+            Rule("", keyword, msg, whatsapp, facebook, "")
         }
     }
 }
