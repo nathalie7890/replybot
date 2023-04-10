@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import com.nathalie.replybot.MainActivity
 import com.nathalie.replybot.R
 import com.nathalie.replybot.databinding.FragmentLoginBinding
 import com.nathalie.replybot.viewModel.auth.LoginViewModel
@@ -34,6 +35,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>() {
 
         lifecycleScope.launch {
             viewModel.loginFinish.collect {
+                (activity as MainActivity).setUsername()
                 navigateToHome()
             }
         }

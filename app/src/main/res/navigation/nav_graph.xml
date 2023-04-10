@@ -12,6 +12,8 @@
         app:popUpToInclusive="true" />
     <action
         android:id="@+id/to_rules_fragment"
+        app:popUpTo="@id/loginFragment"
+        app:popUpToInclusive="true"
         app:destination="@+id/rulesFragment" />
 
     <fragment
@@ -40,12 +42,23 @@
         <action
             android:id="@+id/action_rules_to_addRule"
             app:destination="@id/addRuleFragment" />
+        <action
+            android:id="@+id/action_rules_to_editRule"
+            app:destination="@id/editRuleFragment" />
     </fragment>
     <fragment
         android:id="@+id/addRuleFragment"
         android:name="com.nathalie.replybot.views.fragments.rule.AddRuleFragment"
-        android:label="AddRuleFragment"
-        tools:layout="@layout/fragment_add_rule"
-        />
+        android:label="Add Rule"
+        tools:layout="@layout/fragment_add_rule" />
+    <fragment
+        android:id="@+id/editRuleFragment"
+        android:name="com.nathalie.replybot.views.fragments.rule.EditRuleFragment"
+        android:label="Edit Rule"
+        tools:layout="@layout/fragment_add_rule">
+        <argument
+            android:name="id"
+            app:argType="string" />
+    </fragment>
 
 </navigation>

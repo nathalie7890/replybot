@@ -16,12 +16,17 @@ class AddRuleViewModel @Inject constructor(
 
     fun addRule(rule: Rule) {
         val isValid = validate(rule.keyword, rule.msg)
+        val selected = rule.whatsapp || rule.facebook
 
         viewModelScope.launch {
             if (isValid) {
-                val userId = authRepo.getUid().toString()
-                safeApiCall { repo.addRule(rule.copy(userId = userId)) }
-                finish.emit(Unit)
+                if(!selected)  {
+                    error.emit("Select at least one option.")
+                } else {
+                    val userId = authRepo.getUid().toString()
+                    safeApiCall { repo.addRule(rule.copy(userId = userId)) }
+                    finish.emit(Unit)
+                }
             } else {
                 error.emit("Kindly fill in every field.")
             }

@@ -2,11 +2,9 @@ package com.nathalie.replybot.views.fragments.rule
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
-import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.nathalie.replybot.R
 import com.nathalie.replybot.data.model.Rule
@@ -15,7 +13,6 @@ import com.nathalie.replybot.viewModel.rule.RulesViewModel
 import com.nathalie.replybot.views.adapters.RuleAdapter
 import com.nathalie.replybot.views.fragments.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class RulesFragment : BaseFragment<FragmentRulesBinding>() {
@@ -36,7 +33,13 @@ class RulesFragment : BaseFragment<FragmentRulesBinding>() {
             }
         }
 
-        setFragmentResultListener("finish_add_rule") { _, result ->
+        fragmentResultRefresh("finish_add_rule")
+        fragmentResultRefresh("finish_edit_rule")
+        fragmentResultRefresh("finish_delete_rule")
+    }
+
+    private fun fragmentResultRefresh(requestKey: String) {
+        setFragmentResultListener(requestKey) { _, result ->
             val refresh = result.getBoolean("refresh")
             if (refresh) {
                 viewModel.onRefresh()
@@ -57,7 +60,13 @@ class RulesFragment : BaseFragment<FragmentRulesBinding>() {
         adapter = RuleAdapter(mutableListOf())
         adapter.listener = object : RuleAdapter.Listener {
             override fun onClick(rule: Rule) {
-                Toast.makeText(requireContext(), "Clicked on detail", Toast.LENGTH_LONG).show()
+                val action = rule.id?.let {
+                    RulesFragmentDirections.actionRulesToEditRule(it)
+                }
+
+                if (action != null) {
+                    NavHostFragment.findNavController(this@RulesFragment).navigate(action)
+                }
             }
         }
 

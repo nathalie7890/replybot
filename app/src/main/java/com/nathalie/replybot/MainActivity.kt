@@ -12,8 +12,11 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import android.widget.TextView
+import androidx.activity.viewModels
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -30,7 +33,9 @@ import com.nathalie.replybot.service.NotificationService
 import com.nathalie.replybot.utils.Constants
 import com.nathalie.replybot.utils.Constants.DEBUG
 import com.nathalie.replybot.utils.NotificationUtils
+import com.nathalie.replybot.viewModel.MainActivityViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -42,6 +47,7 @@ class MainActivity : AppCompatActivity() {
     private val FOREGROUND_REQ_CODE = 1
     private lateinit var myService: MyService
     private lateinit var myReceiver: MyBroadcastReceiver
+    private val viewModel: MainActivityViewModel by viewModels()
 
     @Inject
     lateinit var authRepo: AuthService
@@ -59,6 +65,8 @@ class MainActivity : AppCompatActivity() {
 
         if (!authRepo.isLoggedIn()) {
             findNavController(R.id.navHostFragment).navigate(R.id.to_login_fragment)
+        } else {
+            setUsername()
         }
 
         registerBroadcastReceiver()
@@ -107,6 +115,16 @@ class MainActivity : AppCompatActivity() {
             authRepo.signOut()
             findNavController(R.id.navHostFragment).navigate(R.id.to_login_fragment)
             drawerLayout.closeDrawer(GravityCompat.START)
+        }
+
+    fun setUsername() {
+        lifecycleScope.launch {
+            viewModel.getCurrentUser()
+        }
+
+        viewModel.user.observe(this) { user ->
+            val username = findViewById<TextView>(R.id.tvUserName)
+            username.text = "@${user.name}"
         }
     }
 
