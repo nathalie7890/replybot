@@ -3,50 +3,55 @@
 
     <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/cvRule"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="8dp"
+        android:layout_marginBottom="8dp"
         app:cardBackgroundColor="@color/bg"
         app:cardCornerRadius="10dp"
-        app:strokeWidth="2dp"
-        android:layout_margin="8dp"
-        app:strokeColor="@color/dark_grey"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        app:cardElevation="8dp"
+        app:strokeColor="@color/dark_grey">
+
         <LinearLayout
-            android:padding="16dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="16dp">
+
             <TextView
                 android:id="@+id/tvKeyword"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:textColor="@color/dark_grey"
-                android:layout_marginBottom="8dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Keyword"/>
+                android:layout_marginBottom="8dp"
+                android:text="Keyword"
+                android:textColor="@color/dark_grey"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tvMsg"
-                android:textSize="15sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Message"/>
+                android:text="Message"
+                android:textSize="15sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:gravity="end|center"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:gravity="end|center">
+
                 <ImageView
                     android:id="@+id/iv_whatsapp"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:layout_marginEnd="4dp"
-                    android:src="@drawable/ic_whatsapp_color"/>
+                    android:src="@drawable/ic_whatsapp_color" />
+
                 <ImageView
                     android:id="@+id/iv_facebook"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:src="@drawable/ic_facebook_color"/>
+                    android:src="@drawable/ic_facebook_color" />
             </LinearLayout>
         </LinearLayout>
 
