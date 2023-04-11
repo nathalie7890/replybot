@@ -57,6 +57,7 @@
             android:background="@drawable/input"
             android:gravity="top"
             android:hint="Keyword"
+           android:elevation="20dp"
             android:inputType="textMultiLine"
             android:padding="8dp"
             android:textColor="@color/dark_grey"
@@ -187,13 +188,13 @@
             android:text="Delete"
             android:textAllCaps="false"
             android:textColor="@color/red"
-            android:visibility="gone"
             app:cornerRadius="10dp"
             app:layout_constraintBottom_toTopOf="@id/guidelineBottom"
             app:layout_constraintEnd_toStartOf="@id/btnSave"
+            android:visibility="gone"
             app:layout_constraintStart_toEndOf="@id/guidelineLeft"
             app:strokeColor="@color/dark_grey"
-            app:strokeWidth="2dp" />
+            app:strokeWidth="1dp" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
