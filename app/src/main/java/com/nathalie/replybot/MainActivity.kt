@@ -72,7 +72,7 @@ class MainActivity : AppCompatActivity() {
         registerBroadcastReceiver()
 
         // First time launch, open notification settings
-        startActivity(Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"))
+//        startActivity(Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"))
         startService(Intent(this, NotificationService::class.java))
 
         startService()
@@ -116,6 +116,7 @@ class MainActivity : AppCompatActivity() {
             findNavController(R.id.navHostFragment).navigate(R.id.to_login_fragment)
             drawerLayout.closeDrawer(GravityCompat.START)
         }
+    }
 
     fun setUsername() {
         lifecycleScope.launch {
