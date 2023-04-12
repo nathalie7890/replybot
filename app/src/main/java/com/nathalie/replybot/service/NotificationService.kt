@@ -8,7 +8,9 @@ import android.service.notification.StatusBarNotification
 import android.util.Log
 import android.widget.Toast
 import androidx.core.app.NotificationManagerCompat
+import com.nathalie.replybot.data.model.Rule
 import com.nathalie.replybot.data.model.WearableNotification
+import com.nathalie.replybot.data.repository.FireStoreRuleRepository
 import com.nathalie.replybot.utils.Constants
 import com.nathalie.replybot.utils.Constants.DEBUG
 import com.nathalie.replybot.utils.NotificationUtils
@@ -24,7 +26,7 @@ class NotificationService : NotificationListenerService() {
     private lateinit var wNotification: WearableNotification
     private lateinit var msg: String
     private lateinit var replyText: String
-
+    private lateinit var repo: FireStoreRuleRepository
 
     override fun onCreate() {
         super.onCreate()
@@ -68,6 +70,7 @@ class NotificationService : NotificationListenerService() {
 
     private fun checkMsg() {
         msg = wNotification.bundle?.getString("android.text") ?: "Empty"
+        val rules = getRules()
 
 //        val rules = rules.filter((!disabled))
 //        val appName = wNotification.name
@@ -85,6 +88,16 @@ class NotificationService : NotificationListenerService() {
             replyText = "Hello $title"
         }
     }
+
+    fun getRules(): List<Rule> {
+        var rules: List<Rule> = listOf()
+        CoroutineScope(Dispatchers.Default).launch {
+            rules = repo.getAllRules()
+        }
+
+        return rules
+    }
+
 
     private fun createIntentBundle() {
         intent = Intent()
