@@ -13,7 +13,6 @@ class FireStoreRuleRepository(private val ref: CollectionReference) : RuleReposi
         for (document in res) {
             rules.add(document.toObject(Rule::class.java).copy(id = document.id))
         }
-
         return rules
     }
 

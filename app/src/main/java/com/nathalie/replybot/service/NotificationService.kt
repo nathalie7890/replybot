@@ -31,7 +31,6 @@ class NotificationService : NotificationListenerService() {
     override fun onCreate() {
         super.onCreate()
         start()
-        Log.d(DEBUG, "Running")
     }
 
     override fun onNotificationPosted(sbn: StatusBarNotification?) {
@@ -40,8 +39,8 @@ class NotificationService : NotificationListenerService() {
 
         wNotification = NotificationUtils.getWearableNotification(sbn) ?: return
         title = wNotification.bundle?.getString("android.title") ?: "Empty"
-        Log.d(DEBUG, wNotification.name)
 
+        Log.d(DEBUG, wNotification.name)
         Log.d(DEBUG, "hello $title $isRunning")
 
         if (!isRunning) return
@@ -61,10 +60,8 @@ class NotificationService : NotificationListenerService() {
                 )
             )
         ) {
-            Log.d(DEBUG, "log from checktitle")
             return true
         }
-
         return false
     }
 
@@ -82,7 +79,7 @@ class NotificationService : NotificationListenerService() {
 //        }
 
         Log.d(DEBUG, "Title: $title\nBody: $msg")
-        replyText = "Hello, I am ReplyBot. My owner cannot come to the phone right now."
+        replyText = "This is a bot"
 
         if (msg.contains(Regex("hi|hello", RegexOption.IGNORE_CASE))) {
             replyText = "Hello $title"
@@ -136,12 +133,10 @@ class NotificationService : NotificationListenerService() {
         private var isRunning: Boolean = false
         fun start() {
             isRunning = true
-            Log.d(Constants.DEBUG, "Started")
         }
 
         fun stop() {
             isRunning = false
-            Log.d(Constants.DEBUG, "Stopped")
         }
     }
 }

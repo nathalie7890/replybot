@@ -56,7 +56,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         makeDrawerLayout()
-        Log.d(Constants.DEBUG, "hello")
 
         NotificationUtils.createNotificationChannel(this)
         checkPermission("android.permission.POST_NOTIFICATIONS", NOTIFICATION_REQ_CODE)
