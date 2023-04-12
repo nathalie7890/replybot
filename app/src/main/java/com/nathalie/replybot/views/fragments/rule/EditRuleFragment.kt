@@ -7,8 +7,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
+import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.setFragmentResult
@@ -51,9 +53,14 @@ class EditRuleFragment : BaseRuleFragment() {
                     rule.disabled,
                     btnSave,
                     btnDisabled,
-                    listOf(checkSlack, checkWhatsapp, checkFacebook),
+                    etKeyword,
+                    etMsg,
+                    cvDisabled,
                     listOf(llSlack, llWhatsapp, llFacebook)
                 )
+
+//                listOf(checkSlack, checkWhatsapp, checkFacebook),
+//                listOf(llSlack, llWhatsapp, llFacebook)
 
                 btnSave.setOnClickListener { _ ->
                     val updatedRule = getRule()?.copy(userId = rule.userId)
@@ -98,26 +105,31 @@ class EditRuleFragment : BaseRuleFragment() {
         disabled: Boolean,
         btnSave: MaterialButton,
         btnDisabled: MaterialButton,
-        checkBoxes: List<CheckBox>,
+        etKeyword: EditText,
+        etMsg: EditText,
+        cvDisabled: CardView,
         checkBoxContainers: List<LinearLayout>
     ) {
-        btnSave.isEnabled = !disabled
+
+        btnSave.isVisible = !disabled
+        etKeyword.isEnabled = !disabled
+        etMsg.isEnabled = !disabled
 
         if (disabled) {
             btnDisabled.text = "Enable"
-            checkBoxes.forEach {
-                it.isEnabled = false
-            }
+            btnDisabled.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.blue))
+            cvDisabled.isVisible = true
+
             checkBoxContainers.forEach {
-                it.isEnabled = false
+                it.isVisible = false
             }
         } else {
             btnDisabled.text = "Disable"
-            checkBoxes.forEach {
-                it.isEnabled = true
-            }
+            btnDisabled.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.red))
+            cvDisabled.isVisible = false
+
             checkBoxContainers.forEach {
-                it.isEnabled = true
+                it.isVisible = true
             }
         }
     }

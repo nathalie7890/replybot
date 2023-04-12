@@ -41,6 +41,7 @@ class RulesFragment : BaseFragment<FragmentRulesBinding>() {
             btnStopService.setOnClickListener {
                 NotificationService.stop()
             }
+
         }
 
         fragmentResultRefresh("finish_add_rule")
