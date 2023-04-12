@@ -29,6 +29,7 @@ class RuleAdapter(private var rules: MutableList<Rule>) :
             tvMsg.text = rule.msg
             ivWhatsapp.isVisible = rule.whatsapp
             ivFacebook.isVisible = rule.facebook
+            ivSlack.isVisible = rule.slack
 
             cvRule.setOnClickListener {
                 listener?.onClick(rule)

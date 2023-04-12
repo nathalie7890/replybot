@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/bg"
@@ -49,22 +49,34 @@
             app:layout_constraintStart_toStartOf="@id/guidelineLeft"
             app:layout_constraintTop_toBottomOf="@id/guidelineTop" />
 
-        <EditText
-            android:id="@+id/etKeyword"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cvKeyword"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+
             android:layout_marginTop="16dp"
-            android:background="@drawable/input"
-            android:gravity="top"
-            android:hint="Keyword"
-           android:elevation="20dp"
-            android:inputType="textMultiLine"
-            android:padding="8dp"
-            android:textColor="@color/dark_grey"
-            android:textColorHint="@color/light_grey"
+            app:cardBackgroundColor="@color/bg"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="8dp"
             app:layout_constraintEnd_toEndOf="@id/guidelineRight"
             app:layout_constraintStart_toStartOf="@id/guidelineLeft"
-            app:layout_constraintTop_toBottomOf="@id/tvTitle" />
+            app:layout_constraintTop_toBottomOf="@id/tvTitle">
+
+            <EditText
+                android:id="@+id/etKeyword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/add_rule_input"
+                android:gravity="top"
+                android:hint="Keyword"
+                android:inputType="textMultiLine"
+                android:padding="8dp"
+                android:textColor="@color/dark_grey"
+                android:textColorHint="@color/light_grey"
+                app:layout_constraintEnd_toEndOf="@id/guidelineRight"
+                app:layout_constraintStart_toStartOf="@id/guidelineLeft"
+                app:layout_constraintTop_toBottomOf="@id/tvTitle" />
+        </androidx.cardview.widget.CardView>
 
         <TextView
             android:id="@+id/tvKeywordExample"
@@ -74,24 +86,33 @@
             android:text="Eg: Hi, how are you?"
             app:layout_constraintEnd_toEndOf="@id/guidelineRight"
             app:layout_constraintStart_toStartOf="@id/guidelineLeft"
-            app:layout_constraintTop_toBottomOf="@id/etKeyword" />
+            app:layout_constraintTop_toBottomOf="@id/cvKeyword" />
 
-        <EditText
-            android:id="@+id/etMsg"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cvMsg"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:background="@drawable/input"
-            android:gravity="top"
-            android:hint="Message"
-            android:inputType="textMultiLine"
-            android:lines="5"
-            android:padding="8dp"
-            android:textColor="@color/dark_grey"
-            android:textColorHint="@color/light_grey"
+            app:cardBackgroundColor="@color/bg"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="8dp"
             app:layout_constraintEnd_toEndOf="@id/guidelineRight"
             app:layout_constraintStart_toStartOf="@id/guidelineLeft"
-            app:layout_constraintTop_toBottomOf="@id/tvKeywordExample" />
+            app:layout_constraintTop_toBottomOf="@id/tvKeywordExample">
+
+            <EditText
+                android:id="@+id/etMsg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/add_rule_input"
+                android:gravity="top"
+                android:hint="Message"
+                android:inputType="textMultiLine"
+                android:lines="5"
+                android:padding="8dp"
+                android:textColor="@color/dark_grey"
+                android:textColorHint="@color/light_grey" />
+        </androidx.cardview.widget.CardView>
 
         <TextView
             android:id="@+id/tvMsgExample"
@@ -101,7 +122,37 @@
             android:text="Eg: Hi, I am fine."
             app:layout_constraintEnd_toEndOf="@id/guidelineRight"
             app:layout_constraintStart_toStartOf="@id/guidelineLeft"
-            app:layout_constraintTop_toBottomOf="@id/etMsg" />
+            app:layout_constraintTop_toBottomOf="@id/cvMsg" />
+
+        <LinearLayout
+            android:id="@+id/ll_slack"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/slack_ll"
+            android:weightSum="1"
+            app:layout_constraintBottom_toTopOf="@id/ll_whatsapp"
+            app:layout_constraintEnd_toEndOf="@id/guidelineRight"
+            app:layout_constraintStart_toStartOf="@id/guidelineLeft">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:drawablePadding="8dp"
+                android:gravity="start|center"
+                android:paddingStart="8dp"
+                android:text="Add to Slack"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                app:drawableStartCompat="@drawable/ic_slack" />
+
+            <CheckBox
+                android:id="@+id/checkSlack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:buttonTint="@color/white" />
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/ll_whatsapp"
@@ -154,7 +205,7 @@
                 android:text="Add to Facebook"
                 android:textColor="@color/white"
                 android:textSize="16sp"
-                app:drawableStartCompat="@drawable/ic_facebook" />
+                app:drawableStartCompat="@drawable/ic_messenger" />
 
             <CheckBox
                 android:id="@+id/checkFacebook"
@@ -188,10 +239,10 @@
             android:text="Delete"
             android:textAllCaps="false"
             android:textColor="@color/red"
+            android:visibility="gone"
             app:cornerRadius="10dp"
             app:layout_constraintBottom_toTopOf="@id/guidelineBottom"
             app:layout_constraintEnd_toStartOf="@id/btnSave"
-            android:visibility="gone"
             app:layout_constraintStart_toEndOf="@id/guidelineLeft"
             app:strokeColor="@color/dark_grey"
             app:strokeWidth="1dp" />

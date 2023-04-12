@@ -6,9 +6,11 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.nathalie.replybot.MainActivity
 import com.nathalie.replybot.R
 import com.nathalie.replybot.data.model.Rule
 import com.nathalie.replybot.databinding.FragmentRulesBinding
+import com.nathalie.replybot.service.NotificationService
 import com.nathalie.replybot.viewModel.rule.RulesViewModel
 import com.nathalie.replybot.views.adapters.RuleAdapter
 import com.nathalie.replybot.views.fragments.BaseFragment
@@ -30,6 +32,14 @@ class RulesFragment : BaseFragment<FragmentRulesBinding>() {
             btnAdd.setOnClickListener {
                 val action = RulesFragmentDirections.actionRulesToAddRule()
                 navController.navigate(action)
+            }
+
+            btnStartService.setOnClickListener {
+                NotificationService.start()
+            }
+
+            btnStopService.setOnClickListener {
+                NotificationService.stop()
             }
         }
 

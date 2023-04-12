@@ -6,10 +6,16 @@ import android.os.Bundle
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import android.util.Log
+import android.widget.Toast
 import androidx.core.app.NotificationManagerCompat
 import com.nathalie.replybot.data.model.WearableNotification
+import com.nathalie.replybot.utils.Constants
 import com.nathalie.replybot.utils.Constants.DEBUG
 import com.nathalie.replybot.utils.NotificationUtils
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class NotificationService : NotificationListenerService() {
     private lateinit var intent: Intent
@@ -19,8 +25,10 @@ class NotificationService : NotificationListenerService() {
     private lateinit var msg: String
     private lateinit var replyText: String
 
+
     override fun onCreate() {
         super.onCreate()
+        start()
         Log.d(DEBUG, "Running")
     }
 
@@ -29,29 +37,47 @@ class NotificationService : NotificationListenerService() {
         Log.d(DEBUG, "Found a notification")
 
         wNotification = NotificationUtils.getWearableNotification(sbn) ?: return
+        title = wNotification.bundle?.getString("android.title") ?: "Empty"
+        Log.d(DEBUG, wNotification.name)
 
-        checkTitle()
+        Log.d(DEBUG, "hello $title $isRunning")
+
+        if (!isRunning) return
+        if (!checkTitle()) return
+
         checkMsg()
         createIntentBundle()
         wNotificationPendingIntent(sbn)
     }
 
-    private fun checkTitle() {
-        title = wNotification.bundle?.getString("android.title") ?: "Empty"
-        if (title.contains("You") || title == "Empty") return
-        if (!title.contains(
+    private fun checkTitle(): Boolean {
+//        if (title.contains("You") || title == "Empty") return false
+        if (title.contains(
                 Regex(
-                    "caaron|ching|nathalie|justin|yan|xiang|vikram",
+                    "caaron|ching|justin|yan|xiang|vikram|khayrul|601606",
                     RegexOption.IGNORE_CASE
                 )
             )
         ) {
-            return
+            Log.d(DEBUG, "log from checktitle")
+            return true
         }
+
+        return false
     }
 
     private fun checkMsg() {
         msg = wNotification.bundle?.getString("android.text") ?: "Empty"
+
+//        val rules = rules.filter((!disabled))
+//        val appName = wNotification.name
+//
+//        if(msg === rule.keyword) {
+//            if(rule.whatsapp && "com.whatsapp" == appName) {
+//                reply
+//            }
+//        }
+
         Log.d(DEBUG, "Title: $title\nBody: $msg")
         replyText = "Hello, I am ReplyBot. My owner cannot come to the phone right now."
 
@@ -73,14 +99,17 @@ class NotificationService : NotificationListenerService() {
     private fun wNotificationPendingIntent(sbn: StatusBarNotification?) {
         try {
             wNotification.pendingIntent?.let {
-                it.send(this, 0, intent)
-                if (sbn?.id !== null) {
-                    NotificationManagerCompat.from(this).cancel(sbn.id)
-                } else {
+                CoroutineScope(Dispatchers.Default).launch {
+                    isRunning = false
                     cancelNotification(sbn?.key)
+
+                    it.send(this@NotificationService, 0, intent)
+                    delay(1000)
+                    isRunning = true
                 }
             }
         } catch (e: Exception) {
+            isRunning = true
             e.printStackTrace()
         }
     }
@@ -88,5 +117,18 @@ class NotificationService : NotificationListenerService() {
     override fun onDestroy() {
         Log.d(DEBUG, "Destroyed")
         super.onDestroy()
+    }
+
+    companion object {
+        private var isRunning: Boolean = false
+        fun start() {
+            isRunning = true
+            Log.d(Constants.DEBUG, "Started")
+        }
+
+        fun stop() {
+            isRunning = false
+            Log.d(Constants.DEBUG, "Stopped")
+        }
     }
 }
