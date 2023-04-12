@@ -16,4 +16,5 @@
     <color name="blue">#4267B2</color>
     <color name="green">#70C27E</color>
     <color name="yellow">#FFD54F</color>
+    <color name="disabledButton">#575757</color>
 </resources>

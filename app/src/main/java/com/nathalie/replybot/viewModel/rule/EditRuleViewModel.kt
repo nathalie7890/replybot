@@ -23,6 +23,10 @@ class EditRuleViewModel @Inject constructor(repo: RuleRepository) : BaseRuleView
         }
     }
 
+    fun refresh(id: String) {
+        getRuleById(id)
+    }
+
     fun editRule(id: String, rule: Rule) {
         val isValid = Utils.validate(rule.keyword, rule.msg)
         val selected = rule.whatsapp || rule.facebook
@@ -45,6 +49,13 @@ class EditRuleViewModel @Inject constructor(repo: RuleRepository) : BaseRuleView
         viewModelScope.launch {
             repo.deleteRule(id)
             finishDelete.emit(Unit)
+        }
+    }
+
+    fun disabledRule(id: String, disabled: Boolean) {
+        viewModelScope.launch {
+            repo.disableRule(id, disabled)
+            finishDisable.emit(Unit)
         }
     }
 }
