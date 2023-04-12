@@ -31,7 +31,12 @@
         <service
             android:name=".service.NotificationService"
             android:label="@string/notification_service_name"
-            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE" />
+            android:exported="false"
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
+            <intent-filter>
+                <action android:name="android.service.notification.NotificationListenerService" />
+            </intent-filter>
+        </service>
         <service
             android:name=".service.MyFirebaseMessagingService"
             android:exported="false">
@@ -40,9 +45,13 @@
             </intent-filter>
         </service>
 
-        <meta-data android:name="com.google.firebase.messaging.default_notification_channel_id" android:value="@string/default_notification_channel_id" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="@string/default_notification_channel_id" />
 
-        <receiver android:name=".receiver.MyBroadcastReceiver" android:exported="true">
+        <receiver
+            android:name=".receiver.MyBroadcastReceiver"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.AIRPLANE_MODE" />
             </intent-filter>

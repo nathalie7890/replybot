@@ -54,10 +54,9 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        resultLauncher()
 
         makeDrawerLayout()
-        Log.d(DEBUG, authRepo.isLoggedIn().toString())
+        Log.d(Constants.DEBUG, "hello")
 
         NotificationUtils.createNotificationChannel(this)
         checkPermission("android.permission.POST_NOTIFICATIONS", NOTIFICATION_REQ_CODE)
@@ -69,16 +68,15 @@ class MainActivity : AppCompatActivity() {
             setUsername()
         }
 
-        registerBroadcastReceiver()
 
         // First time launch, open notification settings
 //        startActivity(Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"))
         startService(Intent(this, NotificationService::class.java))
-
         startService()
     }
 
     fun startService() {
+        Log.d(Constants.DEBUG, "starting service")
         serviceIntent().also {
             intent.putExtra("EXTRA_DATA", "Hello from MainActivity")
             startService(it)
@@ -158,8 +156,19 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun registerBroadcastReceiver() {
+        NotificationUtils.createNotificationChannel(this)
+        checkPermission(
+            "android.permission.POST_NOTIFICATIONS",
+            NOTIFICATION_REQ_CODE
+        )
+        checkPermission(
+            "android.permission.FOREGROUND_SERVICE",
+            FOREGROUND_REQ_CODE
+        )
+
         val filter = IntentFilter()
         filter.addAction("com.replyBot.MyBroadcast")
+
         myReceiver = MyBroadcastReceiver()
         registerReceiver(myReceiver, filter)
     }

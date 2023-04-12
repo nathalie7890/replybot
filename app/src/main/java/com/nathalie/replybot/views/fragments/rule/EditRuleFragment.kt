@@ -39,6 +39,7 @@ class EditRuleFragment : BaseRuleFragment() {
                 etMsg.setText(rule.msg)
                 checkWhatsapp.isChecked = rule.whatsapp
                 checkFacebook.isChecked = rule.facebook
+                checkSlack.isChecked = rule.slack
 
                 btnSave.setOnClickListener { _ ->
                     val updatedRule = getRule()?.copy(userId = rule.userId)
