@@ -71,7 +71,7 @@ class MainActivity : AppCompatActivity() {
         // First time launch, open notification settings
 //        startActivity(Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"))
         startService(Intent(this, NotificationService::class.java))
-        startService()
+//        startService()
     }
 
     fun startService() {
