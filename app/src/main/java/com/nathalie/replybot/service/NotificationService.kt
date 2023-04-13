@@ -10,8 +10,10 @@ import android.util.Log
 import android.widget.Toast
 import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.MutableLiveData
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.rpc.context.AttributeContext.Auth
 import com.nathalie.replybot.data.model.Rule
 import com.nathalie.replybot.data.model.WearableNotification
 import com.nathalie.replybot.data.repository.FireStoreRuleRepository
@@ -33,6 +35,7 @@ class NotificationService : NotificationListenerService() {
         super.onCreate()
         repo = FireStoreRuleRepository(Firebase.firestore.collection("rules"))
         start()
+
     }
 
     override fun onNotificationPosted(sbn: StatusBarNotification?) {
@@ -83,7 +86,7 @@ class NotificationService : NotificationListenerService() {
             }
 
             val notifName = wNotification.name
-            if ((i.whatsapp || i.facebook || i.slack) && (hasAppName(
+            if ((i.whatsapp || i.facebook) && (hasAppName(
                     notifName,
                     "com.whatsapp"
                 ) || hasAppName(notifName, "com.facebook"))

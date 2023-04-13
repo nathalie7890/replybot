@@ -2,10 +2,13 @@ package com.nathalie.replybot.views.fragments.rule
 
 import android.os.Bundle
 import android.view.View
+import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.button.MaterialButton
 import com.nathalie.replybot.MainActivity
 import com.nathalie.replybot.R
 import com.nathalie.replybot.data.model.Rule
@@ -37,11 +40,13 @@ class RulesFragment : BaseFragment<FragmentRulesBinding>() {
             btnStartService.setOnClickListener {
                 NotificationService.start()
                 (requireActivity() as MainActivity).startService()
+                startServiceBtnClicked(btnStartService, btnStopService, tvServiceIsRunning)
             }
 
             btnStopService.setOnClickListener {
                 NotificationService.stop()
                 (requireActivity() as MainActivity).stopService()
+                stopServiceBtnClicked(btnStartService, btnStopService, tvServiceIsRunning)
             }
 
         }
@@ -49,6 +54,15 @@ class RulesFragment : BaseFragment<FragmentRulesBinding>() {
         fragmentResultRefresh("finish_add_rule")
         fragmentResultRefresh("finish_edit_rule")
         fragmentResultRefresh("finish_delete_rule")
+    }
+
+
+    override fun onBindData(view: View) {
+        super.onBindData(view)
+
+        viewModel.rules.observe(viewLifecycleOwner) {
+            adapter.setRules(it.toMutableList())
+        }
     }
 
     private fun fragmentResultRefresh(requestKey: String) {
@@ -60,12 +74,18 @@ class RulesFragment : BaseFragment<FragmentRulesBinding>() {
         }
     }
 
-    override fun onBindData(view: View) {
-        super.onBindData(view)
+    fun startServiceBtnClicked(btnStart: MaterialButton, btnStop: MaterialButton, tv: TextView) {
+        btnStart.isVisible = false
+        btnStop.isVisible = true
+        tv.text =
+            "Reply bot is running. To disable, tap Disable button below."
+    }
 
-        viewModel.rules.observe(viewLifecycleOwner) {
-            adapter.setRules(it.toMutableList())
-        }
+    fun stopServiceBtnClicked(btnStart: MaterialButton, btnStop: MaterialButton, tv: TextView) {
+        btnStart.isVisible = true
+        btnStop.isVisible = false
+        tv.text =
+            "Reply bot is currently disabled. To enable, tap Enable button below."
     }
 
     fun setupAdapter() {

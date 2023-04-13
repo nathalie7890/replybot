@@ -14,9 +14,8 @@ abstract class BaseRuleFragment : BaseFragment<FragmentAddRuleBinding>() {
             val msg = etMsg.text.toString()
             val whatsapp = checkWhatsapp.isChecked
             val facebook = checkFacebook.isChecked
-            val slack = checkSlack.isChecked
 
-            Rule("", keyword, msg, whatsapp, facebook, slack, false, "")
+            Rule("", keyword, msg, whatsapp, facebook, false, "")
         }
     }
 }
