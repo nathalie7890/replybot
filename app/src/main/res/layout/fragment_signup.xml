@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -12,8 +12,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:background="@color/bg"
         android:layout_height="match_parent"
+        android:background="@color/bg"
         tools:context=".views.fragments.auth.SignupFragment">
 
         <androidx.constraintlayout.widget.Guideline
@@ -133,10 +133,10 @@
                 android:id="@+id/btnGoToLogin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="18sp"
                 android:text="Login instead"
                 android:textAlignment="center"
-                android:textColor="@color/red" />
+                android:textColor="@color/red"
+                android:textSize="18sp" />
         </LinearLayout>
 
 
@@ -150,6 +150,7 @@
             android:paddingVertical="13dp"
             android:text="Create Account"
             android:textAllCaps="false"
+            android:textColor="@color/bg"
             android:textSize="15sp"
             app:cornerRadius="10dp"
             app:layout_constraintBottom_toBottomOf="@id/guidelineBottom"
