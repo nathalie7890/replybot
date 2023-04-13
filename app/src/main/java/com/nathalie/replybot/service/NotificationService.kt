@@ -91,8 +91,7 @@ class NotificationService : NotificationListenerService() {
         CoroutineScope(Dispatchers.Default).launch {
             rules = repo.getAllRules()
         }
-
-        return rules
+        return rules.filter { rule -> !rule.disabled }
     }
 
 

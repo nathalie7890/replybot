@@ -75,7 +75,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun startService() {
-        Log.d(Constants.DEBUG, "starting service")
         serviceIntent().also {
             intent.putExtra("EXTRA_DATA", "Hello from MainActivity")
             startService(it)
