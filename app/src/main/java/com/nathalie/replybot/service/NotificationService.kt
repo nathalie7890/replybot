@@ -29,6 +29,7 @@ class NotificationService : NotificationListenerService() {
     private lateinit var repo: FireStoreRuleRepository
 
     override fun onCreate() {
+        Log.d(DEBUG, "In oncreate notification service")
         super.onCreate()
         start()
     }
@@ -55,7 +56,7 @@ class NotificationService : NotificationListenerService() {
 //        if (title.contains("You") || title == "Empty") return false
         if (title.contains(
                 Regex(
-                    "caaron|ching|justin|yan|xiang|vikram|khayrul|601606",
+                    "caaron|ching|justin|yan|xiang|vikram|khayrul|601606|joel|quan",
                     RegexOption.IGNORE_CASE
                 )
             )
@@ -67,7 +68,8 @@ class NotificationService : NotificationListenerService() {
 
     private fun checkMsg() {
         msg = wNotification.bundle?.getString("android.text") ?: "Empty"
-        val rules = getRules()
+//        val rules = getRules()
+//        Log.d(Constants.DEBUG, rules.toString())
 
 //        val rules = rules.filter((!disabled))
 //        val appName = wNotification.name
@@ -131,10 +133,12 @@ class NotificationService : NotificationListenerService() {
     companion object {
         private var isRunning: Boolean = false
         fun start() {
+            Log.d(DEBUG, "started")
             isRunning = true
         }
 
         fun stop() {
+            Log.d(DEBUG, "stopped")
             isRunning = false
         }
     }
