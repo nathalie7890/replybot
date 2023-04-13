@@ -36,10 +36,12 @@ class RulesFragment : BaseFragment<FragmentRulesBinding>() {
 
             btnStartService.setOnClickListener {
                 NotificationService.start()
+                (requireActivity() as MainActivity).startService()
             }
 
             btnStopService.setOnClickListener {
                 NotificationService.stop()
+                (requireActivity() as MainActivity).stopService()
             }
 
         }
