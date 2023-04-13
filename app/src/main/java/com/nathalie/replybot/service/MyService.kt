@@ -49,6 +49,7 @@ class MyService : Service() {
     }
 
     private fun startNotificationListenerService() {
+
         notificationServiceIntent().also {
             it.action = "android.service.notification.NotificationListenerService"
             startService(it)

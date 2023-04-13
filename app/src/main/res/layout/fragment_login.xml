@@ -139,6 +139,7 @@
             android:textAllCaps="false"
             android:textSize="15sp"
             app:cornerRadius="10dp"
+            android:textColor="@color/bg"
             app:layout_constraintBottom_toBottomOf="@id/guidelineBottom"
             app:layout_constraintEnd_toStartOf="@+id/guidelineRight"
             app:layout_constraintStart_toStartOf="@+id/guidelineLeft"
