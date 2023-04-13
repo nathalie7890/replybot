@@ -13,7 +13,6 @@ class FireStoreRuleRepository(private val ref: CollectionReference) : RuleReposi
         for (document in res) {
             rules.add(document.toObject(Rule::class.java).copy(id = document.id))
         }
-
         return rules
     }
 
@@ -27,7 +26,6 @@ class FireStoreRuleRepository(private val ref: CollectionReference) : RuleReposi
     }
 
     override suspend fun updateRule(id: String, rule: Rule): Rule? {
-        Log.d(Constants.DEBUG, rule.toString())
         ref.document(id).set(rule).await()
         return null
     }
@@ -36,5 +34,8 @@ class FireStoreRuleRepository(private val ref: CollectionReference) : RuleReposi
         ref.document(id).delete().await()
     }
 
+    override suspend fun disableRule(id: String, disabled: Boolean) {
+        ref.document(id).update("disabled", disabled).await()
+    }
 
 }

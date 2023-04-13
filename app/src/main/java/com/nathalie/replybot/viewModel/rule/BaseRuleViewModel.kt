@@ -10,6 +10,7 @@ import kotlinx.coroutines.launch
 abstract class BaseRuleViewModel(val repo: RuleRepository) : BaseViewModel() {
     val finish: MutableSharedFlow<Unit> = MutableSharedFlow()
     val finishDelete: MutableSharedFlow<Unit> = MutableSharedFlow()
+    val finishDisable: MutableSharedFlow<Unit> = MutableSharedFlow()
 
     fun validate(
         keyword: String,

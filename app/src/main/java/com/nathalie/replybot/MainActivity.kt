@@ -56,7 +56,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         makeDrawerLayout()
-        Log.d(Constants.DEBUG, "hello")
 
         NotificationUtils.createNotificationChannel(this)
         checkPermission("android.permission.POST_NOTIFICATIONS", NOTIFICATION_REQ_CODE)
@@ -72,7 +71,7 @@ class MainActivity : AppCompatActivity() {
         // First time launch, open notification settings
 //        startActivity(Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"))
         startService(Intent(this, NotificationService::class.java))
-        startService()
+//        startService()
     }
 
     fun startService() {

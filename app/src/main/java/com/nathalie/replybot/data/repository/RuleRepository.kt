@@ -8,4 +8,5 @@ interface RuleRepository {
     suspend fun addRule(rule: Rule)
     suspend fun updateRule(id: String, rule: Rule): Rule?
     suspend fun deleteRule(id: String)
+    suspend fun disableRule(id: String, disabled: Boolean)
 }

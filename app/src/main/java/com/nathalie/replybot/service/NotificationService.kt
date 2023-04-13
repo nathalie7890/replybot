@@ -8,7 +8,9 @@ import android.service.notification.StatusBarNotification
 import android.util.Log
 import android.widget.Toast
 import androidx.core.app.NotificationManagerCompat
+import com.nathalie.replybot.data.model.Rule
 import com.nathalie.replybot.data.model.WearableNotification
+import com.nathalie.replybot.data.repository.FireStoreRuleRepository
 import com.nathalie.replybot.utils.Constants
 import com.nathalie.replybot.utils.Constants.DEBUG
 import com.nathalie.replybot.utils.NotificationUtils
@@ -24,12 +26,11 @@ class NotificationService : NotificationListenerService() {
     private lateinit var wNotification: WearableNotification
     private lateinit var msg: String
     private lateinit var replyText: String
-
+    private lateinit var repo: FireStoreRuleRepository
 
     override fun onCreate() {
         super.onCreate()
         start()
-        Log.d(DEBUG, "Running")
     }
 
     override fun onNotificationPosted(sbn: StatusBarNotification?) {
@@ -38,8 +39,8 @@ class NotificationService : NotificationListenerService() {
 
         wNotification = NotificationUtils.getWearableNotification(sbn) ?: return
         title = wNotification.bundle?.getString("android.title") ?: "Empty"
-        Log.d(DEBUG, wNotification.name)
 
+        Log.d(DEBUG, wNotification.name)
         Log.d(DEBUG, "hello $title $isRunning")
 
         if (!isRunning) return
@@ -59,15 +60,14 @@ class NotificationService : NotificationListenerService() {
                 )
             )
         ) {
-            Log.d(DEBUG, "log from checktitle")
             return true
         }
-
         return false
     }
 
     private fun checkMsg() {
         msg = wNotification.bundle?.getString("android.text") ?: "Empty"
+        val rules = getRules()
 
 //        val rules = rules.filter((!disabled))
 //        val appName = wNotification.name
@@ -79,12 +79,22 @@ class NotificationService : NotificationListenerService() {
 //        }
 
         Log.d(DEBUG, "Title: $title\nBody: $msg")
-        replyText = "Hello, I am ReplyBot. My owner cannot come to the phone right now."
+        replyText = "This is a bot"
 
         if (msg.contains(Regex("hi|hello", RegexOption.IGNORE_CASE))) {
             replyText = "Hello $title"
         }
     }
+
+    fun getRules(): List<Rule> {
+        var rules: List<Rule> = listOf()
+        CoroutineScope(Dispatchers.Default).launch {
+            rules = repo.getAllRules()
+        }
+
+        return rules
+    }
+
 
     private fun createIntentBundle() {
         intent = Intent()
@@ -123,12 +133,10 @@ class NotificationService : NotificationListenerService() {
         private var isRunning: Boolean = false
         fun start() {
             isRunning = true
-            Log.d(Constants.DEBUG, "Started")
         }
 
         fun stop() {
             isRunning = false
-            Log.d(Constants.DEBUG, "Stopped")
         }
     }
 }
