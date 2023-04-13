@@ -1,6 +1,7 @@
 package com.nathalie.replybot.service
 
 import android.app.RemoteInput
+import android.content.ComponentCallbacks
 import android.content.Intent
 import android.os.Bundle
 import android.service.notification.NotificationListenerService
@@ -8,16 +9,16 @@ import android.service.notification.StatusBarNotification
 import android.util.Log
 import android.widget.Toast
 import androidx.core.app.NotificationManagerCompat
+import androidx.lifecycle.MutableLiveData
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.nathalie.replybot.data.model.Rule
 import com.nathalie.replybot.data.model.WearableNotification
 import com.nathalie.replybot.data.repository.FireStoreRuleRepository
 import com.nathalie.replybot.utils.Constants
 import com.nathalie.replybot.utils.Constants.DEBUG
 import com.nathalie.replybot.utils.NotificationUtils
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 class NotificationService : NotificationListenerService() {
     private lateinit var intent: Intent
@@ -25,12 +26,12 @@ class NotificationService : NotificationListenerService() {
     private lateinit var title: String
     private lateinit var wNotification: WearableNotification
     private lateinit var msg: String
-    private lateinit var replyText: String
+    private var replyText: String = ""
     private lateinit var repo: FireStoreRuleRepository
 
     override fun onCreate() {
-        Log.d(DEBUG, "In oncreate notification service")
         super.onCreate()
+        repo = FireStoreRuleRepository(Firebase.firestore.collection("rules"))
         start()
     }
 
@@ -40,20 +41,18 @@ class NotificationService : NotificationListenerService() {
 
         wNotification = NotificationUtils.getWearableNotification(sbn) ?: return
         title = wNotification.bundle?.getString("android.title") ?: "Empty"
-
-        Log.d(DEBUG, wNotification.name)
-        Log.d(DEBUG, "hello $title $isRunning")
+        Log.d(DEBUG, "Title: $title")
 
         if (!isRunning) return
         if (!checkTitle()) return
 
-        checkMsg()
-        createIntentBundle()
-        wNotificationPendingIntent(sbn)
+        checkMsg {
+            createIntentBundle()
+            wNotificationPendingIntent(sbn)
+        }
     }
 
     private fun checkTitle(): Boolean {
-//        if (title.contains("You") || title == "Empty") return false
         if (title.contains(
                 Regex(
                     "caaron|ching|justin|yan|xiang|vikram|khayrul|601606|joel|quan",
@@ -66,36 +65,55 @@ class NotificationService : NotificationListenerService() {
         return false
     }
 
-    private fun checkMsg() {
+    private fun checkMsg(callback: () -> Unit) {
         msg = wNotification.bundle?.getString("android.text") ?: "Empty"
-//        val rules = getRules()
-//        Log.d(Constants.DEBUG, rules.toString())
 
-//        val rules = rules.filter((!disabled))
-//        val appName = wNotification.name
-//
-//        if(msg === rule.keyword) {
-//            if(rule.whatsapp && "com.whatsapp" == appName) {
-//                reply
-//            }
+//        wNotification.bundle?.keySet()?.forEach {
+//            Log.d(DEBUG, "keySet: $it \n content: ${wNotification.bundle?.getString(it)}")
 //        }
+//        Log.d(DEBUG, wNotification.bundle?.keySet().toString())
+//        Log.d(DEBUG, "Message: $msg")
+        val rules = getRules()
 
-        Log.d(DEBUG, "Title: $title\nBody: $msg")
-        replyText = "This is a bot"
+        for (i in rules) {
+            if (msg.contains(Regex(i.keyword, RegexOption.IGNORE_CASE))) {
+                replyText = i.msg
+            } else {
+                return
+            }
 
-        if (msg.contains(Regex("hi|hello", RegexOption.IGNORE_CASE))) {
-            replyText = "Hello $title"
+            val notifName = wNotification.name
+            if ((i.whatsapp || i.facebook || i.slack) && (hasAppName(
+                    notifName,
+                    "com.whatsapp"
+                ) || hasAppName(notifName, "com.facebook"))
+            ) {
+                callback()
+            }
         }
+        callback()
     }
 
-    fun getRules(): List<Rule> {
-        var rules: List<Rule> = listOf()
-        CoroutineScope(Dispatchers.Default).launch {
-            rules = repo.getAllRules()
-        }
-        return rules.filter { rule -> !rule.disabled }
+    fun hasAppName(notifName: String, appName: String): Boolean {
+        return notifName.contains(Regex(appName, RegexOption.IGNORE_CASE))
     }
 
+    fun getRules(): MutableList<Rule> {
+        val rules: MutableList<Rule> = mutableListOf()
+
+        val job = CoroutineScope(Dispatchers.Default).launch {
+            val res = repo.getAllRules()
+            res.let {
+                it.forEach { rule ->
+                    rules.add(rule)
+                }
+            }
+        }
+        runBlocking {
+            job.join()
+        }
+        return rules
+    }
 
     private fun createIntentBundle() {
         intent = Intent()
@@ -115,7 +133,7 @@ class NotificationService : NotificationListenerService() {
                     cancelNotification(sbn?.key)
 
                     it.send(this@NotificationService, 0, intent)
-                    delay(1000)
+                    delay(500)
                     isRunning = true
                 }
             }
@@ -133,12 +151,10 @@ class NotificationService : NotificationListenerService() {
     companion object {
         private var isRunning: Boolean = false
         fun start() {
-            Log.d(DEBUG, "started")
             isRunning = true
         }
 
         fun stop() {
-            Log.d(DEBUG, "stopped")
             isRunning = false
         }
     }

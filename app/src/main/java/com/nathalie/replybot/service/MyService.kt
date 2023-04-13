@@ -49,18 +49,17 @@ class MyService : Service() {
     }
 
     private fun startNotificationListenerService() {
-        NotificationService.start()
-//        notificationServiceIntent().also {
-//            it.action = "android.service.notification.NotificationListenerService"
-//            startService(it)
-//        }
+
+        notificationServiceIntent().also {
+            it.action = "android.service.notification.NotificationListenerService"
+            startService(it)
+        }
     }
 
     private fun stopNotificationListenerService() {
-        NotificationService.stop()
-//        notificationServiceIntent().also {
-//            stopService(it)
-//        }
+        notificationServiceIntent().also {
+            stopService(it)
+        }
     }
 
     override fun onDestroy() {
