@@ -13,14 +13,11 @@ import com.nathalie.replybot.utils.NotificationUtils
 class MyFirebaseMessagingService : FirebaseMessagingService() {
     override fun onNewToken(token: String) {
         super.onNewToken(token)
-        Log.d(DEBUG, "Token: $token")
 
         Firebase.firestore.collection("tokens")
             .add(Token(token)).addOnSuccessListener {
-                Log.d(DEBUG, "Token saved successfully")
             }
             .addOnFailureListener {
-                Log.d(DEBUG, "Failed to save token")
                 it.printStackTrace()
             }
     }

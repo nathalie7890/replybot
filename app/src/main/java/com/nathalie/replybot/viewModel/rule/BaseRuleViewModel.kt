@@ -12,6 +12,7 @@ abstract class BaseRuleViewModel(val repo: RuleRepository) : BaseViewModel() {
     val finishDelete: MutableSharedFlow<Unit> = MutableSharedFlow()
     val finishDisable: MutableSharedFlow<Unit> = MutableSharedFlow()
 
+    //check if keyword and message are not empty
     fun validate(
         keyword: String,
         message: String,

@@ -21,9 +21,10 @@ class AddRuleFragment : BaseRuleFragment() {
         super.onBindView(view, savedInstanceState)
 
         binding?.run {
+
+            //when clicked, get rule's value from edit texts and checkboxes then add to FireStore
             btnSave.setOnClickListener {
                 val rule = getRule()
-
                 rule?.let {
                     viewModel.addRule(it)
                 }
@@ -34,6 +35,7 @@ class AddRuleFragment : BaseRuleFragment() {
     override fun onBindData(view: View) {
         super.onBindData(view)
 
+        //after rule is added, call setFragmentResult and pop back to previous stack
         lifecycleScope.launch {
             viewModel.finish.collect {
                 Toast.makeText(requireContext(), "Rule added successfully!", Toast.LENGTH_LONG)

@@ -18,7 +18,9 @@ class SignupViewModel @Inject constructor(private val authRepo: AuthService): Ba
     val email: MutableStateFlow<String> = MutableStateFlow("")
     val password : MutableStateFlow<String> = MutableStateFlow("")
 
+    //sign up
     fun signup() {
+        //make sure name, email and password are not empty
         if (Utils.validate(name.value, email.value, password.value)) {
             viewModelScope.launch {
                 safeApiCall {

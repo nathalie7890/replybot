@@ -38,6 +38,7 @@ class NotificationService : NotificationListenerService() {
 
     }
 
+    //called when notification received
     override fun onNotificationPosted(sbn: StatusBarNotification?) {
         super.onNotificationPosted(sbn)
         Log.d(DEBUG, "Found a notification")
@@ -46,6 +47,7 @@ class NotificationService : NotificationListenerService() {
         title = wNotification.bundle?.getString("android.title") ?: "Empty"
         Log.d(DEBUG, "Title: $title")
 
+        //terminate when isRunning and checkTitle are false
         if (!isRunning) return
         if (!checkTitle()) return
 
@@ -55,6 +57,7 @@ class NotificationService : NotificationListenerService() {
         }
     }
 
+    //check if title contains provided regex
     private fun checkTitle(): Boolean {
         if (title.contains(
                 Regex(
@@ -68,14 +71,9 @@ class NotificationService : NotificationListenerService() {
         return false
     }
 
+    //check if notification body matches rule's keyword then reply according to rule's msg
     private fun checkMsg(callback: () -> Unit) {
         msg = wNotification.bundle?.getString("android.text") ?: "Empty"
-
-//        wNotification.bundle?.keySet()?.forEach {
-//            Log.d(DEBUG, "keySet: $it \n content: ${wNotification.bundle?.getString(it)}")
-//        }
-//        Log.d(DEBUG, wNotification.bundle?.keySet().toString())
-//        Log.d(DEBUG, "Message: $msg")
         val rules = getRules()
 
         for (i in rules) {
@@ -86,21 +84,39 @@ class NotificationService : NotificationListenerService() {
             }
 
             val notifName = wNotification.name
-            if ((i.whatsapp || i.facebook) && (hasAppName(
-                    notifName,
-                    "com.whatsapp"
-                ) || hasAppName(notifName, "com.facebook"))
-            ) {
-                callback()
-            }
+
+            replyIfAppIsSelected(i.whatsapp, "com.whatsapp", notifName, callback)
+            replyIfAppIsSelected(i.facebook, "com.facebook", notifName, callback)
+
+//            if ((i.whatsapp || i.facebook) && (hasAppName(
+//                    notifName,
+//                    "com.whatsapp"
+//                ) || hasAppName(notifName, "com.facebook"))
+//            ) {
+//                callback()
+//            }
         }
         callback()
     }
 
+    //check if user's selected app option matches wNotification.name, if true then fire callback fn
+    fun replyIfAppIsSelected(
+        isSelected: Boolean,
+        userSelectedApp: String,
+        notifName: String,
+        callback: () -> Unit
+    ) {
+        if (isSelected && hasAppName(notifName, userSelectedApp)) {
+            callback()
+        }
+    }
+
+    //utilize regex to check if wNotification.name(string) contains user's selected app option
     fun hasAppName(notifName: String, appName: String): Boolean {
         return notifName.contains(Regex(appName, RegexOption.IGNORE_CASE))
     }
 
+    //fetch all rules that matches current user's id from FireStore
     fun getRules(): MutableList<Rule> {
         val rules: MutableList<Rule> = mutableListOf()
 
@@ -118,6 +134,7 @@ class NotificationService : NotificationListenerService() {
         return rules
     }
 
+    //create intent bundle
     private fun createIntentBundle() {
         intent = Intent()
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -128,6 +145,7 @@ class NotificationService : NotificationListenerService() {
         RemoteInput.addResultsToIntent(wNotification.remoteInputs.toTypedArray(), intent, bundle)
     }
 
+    //send reply
     private fun wNotificationPendingIntent(sbn: StatusBarNotification?) {
         try {
             wNotification.pendingIntent?.let {
