@@ -61,7 +61,7 @@ class NotificationService : NotificationListenerService() {
     private fun checkTitle(): Boolean {
         if (title.contains(
                 Regex(
-                    "caaron|ching|justin|yan|xiang|vikram|khayrul|601606|joel|quan",
+                    "caaron|ching|justin|yan|xiang|vikram|khayrul|601606|joel|quan|Joel",
                     RegexOption.IGNORE_CASE
                 )
             )
@@ -74,50 +74,45 @@ class NotificationService : NotificationListenerService() {
     //check if notification body matches rule's keyword then reply according to rule's msg
     private fun checkMsg(callback: () -> Unit) {
         msg = wNotification.bundle?.getString("android.text") ?: "Empty"
+        var ruleFound = false
+
         val rules = getRules()
 
         for (i in rules) {
             if (msg.contains(Regex(i.keyword, RegexOption.IGNORE_CASE))) {
                 replyText = i.msg
-            } else {
-                return
+                ruleFound = true
+                val notifName = wNotification.name
+
+                if (replyIfAppIsSelected(i.whatsapp, "com.whatsapp", notifName, callback)) break
+                if (replyIfAppIsSelected(i.facebook, "com.facebook.orca", notifName, callback)) break
             }
-
-            val notifName = wNotification.name
-
-            replyIfAppIsSelected(i.whatsapp, "com.whatsapp", notifName, callback)
-            replyIfAppIsSelected(i.facebook, "com.facebook", notifName, callback)
-
-//            if ((i.whatsapp || i.facebook) && (hasAppName(
-//                    notifName,
-//                    "com.whatsapp"
-//                ) || hasAppName(notifName, "com.facebook"))
-//            ) {
-//                callback()
-//            }
         }
-        callback()
+        if (!ruleFound) return
     }
 
     //check if user's selected app option matches wNotification.name, if true then fire callback fn
-    fun replyIfAppIsSelected(
+    private fun replyIfAppIsSelected(
         isSelected: Boolean,
         userSelectedApp: String,
         notifName: String,
         callback: () -> Unit
-    ) {
+    ): Boolean {
         if (isSelected && hasAppName(notifName, userSelectedApp)) {
             callback()
+            return true
         }
+
+        return false
     }
 
     //utilize regex to check if wNotification.name(string) contains user's selected app option
-    fun hasAppName(notifName: String, appName: String): Boolean {
+    private fun hasAppName(notifName: String, appName: String): Boolean {
         return notifName.contains(Regex(appName, RegexOption.IGNORE_CASE))
     }
 
     //fetch all rules that matches current user's id from FireStore
-    fun getRules(): MutableList<Rule> {
+    private fun getRules(): MutableList<Rule> {
         val rules: MutableList<Rule> = mutableListOf()
 
         val job = CoroutineScope(Dispatchers.Default).launch {
@@ -131,7 +126,7 @@ class NotificationService : NotificationListenerService() {
         runBlocking {
             job.join()
         }
-        return rules
+        return rules.filter { rule -> !rule.disabled }.toMutableList()
     }
 
     //create intent bundle
