@@ -88,7 +88,7 @@ class RulesFragment : BaseFragment<FragmentRulesBinding>() {
     ) {
         btnStart.isVisible = false
         btnStop.isVisible = true
-        tv.text = R.string.reply_bot_is_running.toString()
+        tv.text = "Reply bot is running. To disable, tap Disable button below."
     }
 
     //when StopService(Disable) btn is cicked
@@ -99,7 +99,7 @@ class RulesFragment : BaseFragment<FragmentRulesBinding>() {
     ) {
         btnStart.isVisible = true
         btnStop.isVisible = false
-        tv.text = R.string.reply_bot_is_disabled.toString()
+        tv.text = "Reply bot is currently disabled. To enable, tap Enable button below."
     }
 
     //adapter for recycler view
