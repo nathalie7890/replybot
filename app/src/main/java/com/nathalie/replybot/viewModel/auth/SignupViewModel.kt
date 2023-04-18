@@ -2,6 +2,7 @@ package com.nathalie.replybot.viewModel.auth
 
 import androidx.lifecycle.viewModelScope
 import com.nathalie.replybot.data.model.User
+import com.nathalie.replybot.data.repository.AuthRepository
 import com.nathalie.replybot.service.AuthService
 import com.nathalie.replybot.utils.Utils
 import com.nathalie.replybot.viewModel.BaseViewModel
@@ -12,7 +13,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SignupViewModel @Inject constructor(private val authRepo: AuthService): BaseViewModel() {
+class SignupViewModel @Inject constructor(private val authRepo: AuthRepository): BaseViewModel() {
     val signupFinish: MutableSharedFlow<Unit> = MutableSharedFlow()
     val name: MutableStateFlow<String> = MutableStateFlow("")
     val email: MutableStateFlow<String> = MutableStateFlow("")

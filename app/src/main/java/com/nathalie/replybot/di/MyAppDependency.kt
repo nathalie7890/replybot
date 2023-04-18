@@ -5,6 +5,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.nathalie.replybot.data.repository.AuthRepository
 import com.nathalie.replybot.data.repository.FireStoreRuleRepository
 import com.nathalie.replybot.data.repository.RuleRepository
 import com.nathalie.replybot.service.AuthService
@@ -32,7 +33,7 @@ object MyAppDependency {
 
     @Provides
     @Singleton
-    fun getAuthRepository(auth: FirebaseAuth, db: FirebaseFirestore): AuthService {
+    fun getAuthRepository(auth: FirebaseAuth, db: FirebaseFirestore): AuthRepository {
         return AuthService(auth, db.collection("users"))
     }
 
