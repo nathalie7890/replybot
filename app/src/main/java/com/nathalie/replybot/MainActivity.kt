@@ -1,15 +1,12 @@
 package com.nathalie.replybot
 
-import android.app.Activity
 import android.content.Intent
-import android.content.IntentFilter
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import android.widget.TextView
@@ -23,14 +20,12 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import com.google.android.gms.auth.api.phone.SmsRetriever
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.navigation.NavigationView
+import com.nathalie.replybot.data.repository.AuthRepository
 import com.nathalie.replybot.receiver.MyBroadcastReceiver
-import com.nathalie.replybot.service.AuthService
 import com.nathalie.replybot.service.MyService
 import com.nathalie.replybot.service.NotificationService
-import com.nathalie.replybot.utils.Constants
 import com.nathalie.replybot.utils.Constants.DEBUG
 import com.nathalie.replybot.utils.NotificationUtils
 import com.nathalie.replybot.viewModel.MainActivityViewModel
@@ -50,7 +45,7 @@ class MainActivity : AppCompatActivity() {
     private val viewModel: MainActivityViewModel by viewModels()
 
     @Inject
-    lateinit var authRepo: AuthService
+    lateinit var authRepo: AuthRepository
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
