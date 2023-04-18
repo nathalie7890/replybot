@@ -74,21 +74,17 @@ class NotificationService : NotificationListenerService() {
     //check if notification body matches rule's keyword then reply according to rule's msg
     private fun checkMsg(callback: () -> Unit) {
         msg = wNotification.bundle?.getString("android.text") ?: "Empty"
-        var ruleFound = false
-
         val rules = getRules()
 
         for (i in rules) {
             if (msg.contains(Regex(i.keyword, RegexOption.IGNORE_CASE))) {
                 replyText = i.msg
-                ruleFound = true
                 val notifName = wNotification.name
 
                 if (replyIfAppIsSelected(i.whatsapp, "com.whatsapp", notifName, callback)) break
                 if (replyIfAppIsSelected(i.facebook, "com.facebook.orca", notifName, callback)) break
             }
         }
-        if (!ruleFound) return
     }
 
     //check if user's selected app option matches wNotification.name, if true then fire callback fn
