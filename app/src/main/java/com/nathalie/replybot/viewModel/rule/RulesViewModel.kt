@@ -13,9 +13,7 @@ import javax.inject.Inject
 @HiltViewModel
 class RulesViewModel @Inject constructor(
     private val repo: RuleRepository,
-    private val authRepo: AuthService
 ) : BaseViewModel() {
-
     val rules: MutableLiveData<List<Rule>> = MutableLiveData()
 
     override fun onViewCreated() {
@@ -23,6 +21,8 @@ class RulesViewModel @Inject constructor(
         getRules()
     }
 
+
+    //fetch every rule that matches the current user's id from FireStoreRuleRepository
     fun getRules() {
         viewModelScope.launch {
             val res = safeApiCall { repo.getAllRules() }
@@ -32,6 +32,7 @@ class RulesViewModel @Inject constructor(
         }
     }
 
+    //call getRules(), called after change is applied to re-fetch all rule
     fun onRefresh() {
         getRules()
     }

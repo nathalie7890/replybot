@@ -3,4 +3,6 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="notification_service_name">Notification Service</string>
     <string name="default_notification_channel_id">chat_app_default_notification</string>
+    <string name="reply_bot_is_running">Reply bot is running. To disable, tap Disable button below.</string>
+    <string name="reply_bot_is_disabled">Reply bot is currently disabled. To enable, tap Enable button below.</string>
 </resources>

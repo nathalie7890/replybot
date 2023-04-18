@@ -2,10 +2,13 @@ package com.nathalie.replybot.views.fragments.rule
 
 import android.os.Bundle
 import android.view.View
+import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.button.MaterialButton
 import com.nathalie.replybot.MainActivity
 import com.nathalie.replybot.R
 import com.nathalie.replybot.data.model.Rule
@@ -29,28 +32,45 @@ class RulesFragment : BaseFragment<FragmentRulesBinding>() {
         setupAdapter()
 
         binding?.run {
+            //when clicked, navigate to RulesFragment
             btnAdd.setOnClickListener {
                 val action = RulesFragmentDirections.actionRulesToAddRule()
                 navController.navigate(action)
             }
 
+            //when clicked, start notification service
             btnStartService.setOnClickListener {
                 NotificationService.start()
                 (requireActivity() as MainActivity).startService()
+                startServiceBtnClicked(btnStartService, btnStopService, tvServiceIsRunning)
             }
 
+            //when clicked, stop notification service
             btnStopService.setOnClickListener {
                 NotificationService.stop()
                 (requireActivity() as MainActivity).stopService()
+                stopServiceBtnClicked(btnStartService, btnStopService, tvServiceIsRunning)
             }
 
         }
 
+        //set fragment result listeners with request key
         fragmentResultRefresh("finish_add_rule")
         fragmentResultRefresh("finish_edit_rule")
         fragmentResultRefresh("finish_delete_rule")
     }
 
+
+    override fun onBindData(view: View) {
+        super.onBindData(view)
+
+        //filled recycler views with items(rules)
+        viewModel.rules.observe(viewLifecycleOwner) {
+            adapter.setRules(it.toMutableList())
+        }
+    }
+
+    //set fragment result listeners with request key
     private fun fragmentResultRefresh(requestKey: String) {
         setFragmentResultListener(requestKey) { _, result ->
             val refresh = result.getBoolean("refresh")
@@ -60,17 +80,34 @@ class RulesFragment : BaseFragment<FragmentRulesBinding>() {
         }
     }
 
-    override fun onBindData(view: View) {
-        super.onBindData(view)
-
-        viewModel.rules.observe(viewLifecycleOwner) {
-            adapter.setRules(it.toMutableList())
-        }
+    //when StartService(Enable) btn is clicked
+    private fun startServiceBtnClicked(
+        btnStart: MaterialButton,
+        btnStop: MaterialButton,
+        tv: TextView
+    ) {
+        btnStart.isVisible = false
+        btnStop.isVisible = true
+        tv.text = "Reply bot is running. To disable, tap Disable button below."
     }
 
-    fun setupAdapter() {
+    //when StopService(Disable) btn is cicked
+    private fun stopServiceBtnClicked(
+        btnStart: MaterialButton,
+        btnStop: MaterialButton,
+        tv: TextView
+    ) {
+        btnStart.isVisible = true
+        btnStop.isVisible = false
+        tv.text = "Reply bot is currently disabled. To enable, tap Enable button below."
+    }
+
+    //adapter for recycler view
+    private fun setupAdapter() {
         val layoutManager = LinearLayoutManager(requireContext())
         adapter = RuleAdapter(mutableListOf())
+
+        //when an item(rule) is clicked, navigate to EditRuleFragment with rule's id
         adapter.listener = object : RuleAdapter.Listener {
             override fun onClick(rule: Rule) {
                 val action = rule.id?.let {

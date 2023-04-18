@@ -16,7 +16,9 @@ class LoginViewModel @Inject constructor(private val authRepo: AuthService) : Ba
     val email: MutableStateFlow<String> = MutableStateFlow("")
     val password: MutableStateFlow<String> = MutableStateFlow("")
 
+    //login
     fun login() {
+        //make sure email and password are not empty else display toast as indication to user
         if (Utils.validate(email.value, password.value)) {
             viewModelScope.launch {
                 safeApiCall {

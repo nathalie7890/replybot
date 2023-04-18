@@ -47,7 +47,6 @@ class EditRuleFragment : BaseRuleFragment() {
                 etMsg.setText(rule.msg)
                 checkWhatsapp.isChecked = rule.whatsapp
                 checkFacebook.isChecked = rule.facebook
-                checkSlack.isChecked = rule.slack
 
                 isDisabled(
                     rule.disabled,
@@ -56,23 +55,26 @@ class EditRuleFragment : BaseRuleFragment() {
                     etKeyword,
                     etMsg,
                     cvDisabled,
-                    listOf(llSlack, llWhatsapp, llFacebook)
+                    listOf(llWhatsapp, llFacebook)
                 )
 
-//                listOf(checkSlack, checkWhatsapp, checkFacebook),
-//                listOf(llSlack, llWhatsapp, llFacebook)
 
+                //when clicked, get rule's value from edit texts and checkboxes
                 btnSave.setOnClickListener { _ ->
                     val updatedRule = getRule()?.copy(userId = rule.userId)
+
+                    //update rule in FireStore
                     updatedRule?.let {
                         viewModel.editRule(navArgs.id, updatedRule)
                     }
                 }
 
+                //when clicked, delete rule that matches the id provided from FireStore
                 btnDelete.setOnClickListener {
                     viewModel.deleteRule(navArgs.id)
                 }
 
+                //when clicked, toggle rule's disabled value and update it in FireStore
                 btnDisabled.setOnClickListener {
                     val disabled: Boolean = !rule.disabled
                     viewModel.disabledRule(navArgs.id, disabled)
@@ -80,19 +82,21 @@ class EditRuleFragment : BaseRuleFragment() {
             }
         }
 
-
+        //after updated rule is saved
         lifecycleScope.launch {
             viewModel.finish.collect {
                 popBackWithToast("finish_edit_rule", "Rule updated successfully!")
             }
         }
 
+        //after rule is deleted
         lifecycleScope.launch {
             viewModel.finishDelete.collect {
                 popBackWithToast("finish_delete_rule", "Rule deleted successfully!")
             }
         }
 
+        //after rule's disable value changed, refresh the current rule
         lifecycleScope.launch {
             viewModel.finishDisable.collect {
                 viewModel.refresh(navArgs.id)
@@ -134,7 +138,7 @@ class EditRuleFragment : BaseRuleFragment() {
         }
     }
 
-
+    //call setFragmentResult with request key and display toast with custom msg
     private fun popBackWithToast(requestKey: String, toastMsg: String) {
         val bundle = Bundle()
         bundle.putBoolean("refresh", true)

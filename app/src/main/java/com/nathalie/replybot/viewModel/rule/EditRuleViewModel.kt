@@ -14,6 +14,7 @@ import javax.inject.Inject
 class EditRuleViewModel @Inject constructor(repo: RuleRepository) : BaseRuleViewModel(repo) {
     val rule: MutableLiveData<Rule> = MutableLiveData()
 
+    //fetch rule that matches the provided id from firebase
     fun getRuleById(id: String) {
         viewModelScope.launch {
             val res = safeApiCall { repo.getRuleById(id) }
@@ -23,14 +24,20 @@ class EditRuleViewModel @Inject constructor(repo: RuleRepository) : BaseRuleView
         }
     }
 
+    //fetch rule that matches the provided id, usually called after change is applied
     fun refresh(id: String) {
         getRuleById(id)
     }
 
+    //update rule(match id) in firebase
     fun editRule(id: String, rule: Rule) {
+        //returns true is keyword and msg are not empty
         val isValid = Utils.validate(rule.keyword, rule.msg)
+
+        //returns true if one of the checkboxes(whatsapp & facebook) is checked
         val selected = rule.whatsapp || rule.facebook
 
+        //if isValid & selected return true, update rule(match id) in firebase
         viewModelScope.launch {
             if (isValid) {
                 if (!selected) {
@@ -45,6 +52,7 @@ class EditRuleViewModel @Inject constructor(repo: RuleRepository) : BaseRuleView
         }
     }
 
+    //delete rule that matches the id provided from firebase
     fun deleteRule(id: String) {
         viewModelScope.launch {
             repo.deleteRule(id)
@@ -52,6 +60,7 @@ class EditRuleViewModel @Inject constructor(repo: RuleRepository) : BaseRuleView
         }
     }
 
+    //toggle rule's disable value and update it from firebase
     fun disabledRule(id: String, disabled: Boolean) {
         viewModelScope.launch {
             repo.disableRule(id, disabled)

@@ -23,6 +23,8 @@ class SignupFragment : BaseFragment<FragmentSignupBinding>() {
         super.onBindView(view, savedInstanceState)
         binding?.viewModel = viewModel
 
+
+        //when clicked, navigate to LoginFragment
         binding?.run {
             btnGoToLogin.setOnClickListener {
                 navigateToLogin()
@@ -32,15 +34,17 @@ class SignupFragment : BaseFragment<FragmentSignupBinding>() {
 
     override fun onBindData(view: View) {
         super.onBindData(view)
+
+        //after user signs up, navigate to LoginFragment
         lifecycleScope.launch {
             viewModel.signupFinish.collect {
                 val action = LoginFragmentDirections.toLoginFragment()
                 navController.navigate(action)
-                Log.d(Constants.DEBUG, "Signup successfully")
             }
         }
     }
 
+    //navgate to LoginFragment
     private fun navigateToLogin() {
         val action = SignupFragmentDirections.actionSignupToLogin()
         navController.navigate(action)

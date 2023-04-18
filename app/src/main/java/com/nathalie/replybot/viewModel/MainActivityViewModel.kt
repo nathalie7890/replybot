@@ -10,6 +10,7 @@ import javax.inject.Inject
 class MainActivityViewModel @Inject constructor(private val auth: AuthService) : BaseViewModel() {
     val user: MutableLiveData<User> = MutableLiveData()
 
+    //fetch current user from firebase
     suspend fun getCurrentUser() {
         val res = safeApiCall { auth.getCurrentUser() }
         res.let {

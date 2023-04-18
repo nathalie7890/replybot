@@ -10,8 +10,10 @@ import android.util.Log
 import android.widget.Toast
 import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.MutableLiveData
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.rpc.context.AttributeContext.Auth
 import com.nathalie.replybot.data.model.Rule
 import com.nathalie.replybot.data.model.WearableNotification
 import com.nathalie.replybot.data.repository.FireStoreRuleRepository
@@ -33,8 +35,10 @@ class NotificationService : NotificationListenerService() {
         super.onCreate()
         repo = FireStoreRuleRepository(Firebase.firestore.collection("rules"))
         start()
+
     }
 
+    //called when notification received
     override fun onNotificationPosted(sbn: StatusBarNotification?) {
         super.onNotificationPosted(sbn)
         Log.d(DEBUG, "Found a notification")
@@ -43,6 +47,7 @@ class NotificationService : NotificationListenerService() {
         title = wNotification.bundle?.getString("android.title") ?: "Empty"
         Log.d(DEBUG, "Title: $title")
 
+        //terminate when isRunning and checkTitle are false
         if (!isRunning) return
         if (!checkTitle()) return
 
@@ -52,10 +57,11 @@ class NotificationService : NotificationListenerService() {
         }
     }
 
+    //check if title contains provided regex
     private fun checkTitle(): Boolean {
         if (title.contains(
                 Regex(
-                    "caaron|ching|justin|yan|xiang|vikram|khayrul|601606|joel|quan",
+                    "caaron|ching|justin|yan|xiang|vikram|khayrul|601606|joel|quan|Joel",
                     RegexOption.IGNORE_CASE
                 )
             )
@@ -65,40 +71,44 @@ class NotificationService : NotificationListenerService() {
         return false
     }
 
+    //check if notification body matches rule's keyword then reply according to rule's msg
     private fun checkMsg(callback: () -> Unit) {
         msg = wNotification.bundle?.getString("android.text") ?: "Empty"
-
-//        wNotification.bundle?.keySet()?.forEach {
-//            Log.d(DEBUG, "keySet: $it \n content: ${wNotification.bundle?.getString(it)}")
-//        }
-//        Log.d(DEBUG, wNotification.bundle?.keySet().toString())
-//        Log.d(DEBUG, "Message: $msg")
         val rules = getRules()
 
         for (i in rules) {
             if (msg.contains(Regex(i.keyword, RegexOption.IGNORE_CASE))) {
                 replyText = i.msg
-            } else {
-                return
-            }
+                val notifName = wNotification.name
 
-            val notifName = wNotification.name
-            if ((i.whatsapp || i.facebook || i.slack) && (hasAppName(
-                    notifName,
-                    "com.whatsapp"
-                ) || hasAppName(notifName, "com.facebook"))
-            ) {
-                callback()
+                if (replyIfAppIsSelected(i.whatsapp, "com.whatsapp", notifName, callback)) break
+                if (replyIfAppIsSelected(i.facebook, "com.facebook.orca", notifName, callback)) break
             }
         }
-        callback()
     }
 
-    fun hasAppName(notifName: String, appName: String): Boolean {
+    //check if user's selected app option matches wNotification.name, if true then fire callback fn
+    private fun replyIfAppIsSelected(
+        isSelected: Boolean,
+        userSelectedApp: String,
+        notifName: String,
+        callback: () -> Unit
+    ): Boolean {
+        if (isSelected && hasAppName(notifName, userSelectedApp)) {
+            callback()
+            return true
+        }
+
+        return false
+    }
+
+    //utilize regex to check if wNotification.name(string) contains user's selected app option
+    private fun hasAppName(notifName: String, appName: String): Boolean {
         return notifName.contains(Regex(appName, RegexOption.IGNORE_CASE))
     }
 
-    fun getRules(): MutableList<Rule> {
+    //fetch all rules that matches current user's id from FireStore
+    private fun getRules(): MutableList<Rule> {
         val rules: MutableList<Rule> = mutableListOf()
 
         val job = CoroutineScope(Dispatchers.Default).launch {
@@ -112,9 +122,10 @@ class NotificationService : NotificationListenerService() {
         runBlocking {
             job.join()
         }
-        return rules
+        return rules.filter { rule -> !rule.disabled }.toMutableList()
     }
 
+    //create intent bundle
     private fun createIntentBundle() {
         intent = Intent()
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -125,6 +136,7 @@ class NotificationService : NotificationListenerService() {
         RemoteInput.addResultsToIntent(wNotification.remoteInputs.toTypedArray(), intent, bundle)
     }
 
+    //send reply
     private fun wNotificationPendingIntent(sbn: StatusBarNotification?) {
         try {
             wNotification.pendingIntent?.let {

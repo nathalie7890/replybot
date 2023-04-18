@@ -24,6 +24,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>() {
         binding?.viewModel = viewModel
 
         binding?.run {
+            //when clicked, navigate to SignUpFragment
             btnGoToSignup.setOnClickListener {
                 navigateToSignUp()
             }
@@ -33,6 +34,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>() {
     override fun onBindData(view: View) {
         super.onBindData(view)
 
+        //after user logs in, set username in left drawer then navigate to RuleFragment
         lifecycleScope.launch {
             viewModel.loginFinish.collect {
                 (activity as MainActivity).setUsername()
@@ -41,14 +43,14 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>() {
         }
     }
 
-
+    //navigate to SignUpFragment
     private fun navigateToSignUp() {
         val action = LoginFragmentDirections.actionLoginToSignup()
         navController.navigate(action)
     }
 
+    //navigate to RuleFragment
     private fun navigateToHome() {
-//        (requireContext().applicationContext as MyApplication).fetchUser()
         val action = LoginFragmentDirections.toRulesFragment()
         navController.navigate(action)
     }

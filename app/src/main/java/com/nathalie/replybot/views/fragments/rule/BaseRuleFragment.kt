@@ -8,15 +8,15 @@ import com.nathalie.replybot.views.fragments.BaseFragment
 abstract class BaseRuleFragment : BaseFragment<FragmentAddRuleBinding>() {
     override fun getLayoutResource() = R.layout.fragment_add_rule
 
+    //get rule's values from edit texts and checkboxes
     fun getRule(): Rule? {
         return binding?.run {
             val keyword = etKeyword.text.toString()
             val msg = etMsg.text.toString()
             val whatsapp = checkWhatsapp.isChecked
             val facebook = checkFacebook.isChecked
-            val slack = checkSlack.isChecked
 
-            Rule("", keyword, msg, whatsapp, facebook, slack, false, "")
+            Rule("", keyword, msg, whatsapp, facebook, false, "")
         }
     }
 }
